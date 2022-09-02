@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -16,7 +19,7 @@ const App = () => {
     console.log("new name", newName);
     const newPerson = {
       name: newName,
-      num: newNum,
+      number: newNum,
     };
     let checker;
     persons.every((person) => {
@@ -35,7 +38,7 @@ const App = () => {
   const displayPersons = persons.map((person) => {
     return (
       <div>
-        {person.name} {person.num}
+        {person.name} {person.number}
       </div>
     );
   });
@@ -60,23 +63,17 @@ const App = () => {
   return (
     <div>
       <h2>phonebook</h2>
-      <div>
-        Filter shown with a <input type="text" onChange={filter} />
-      </div>
+      <Filter Filterfunc={filter} />
       <h2>Add a new number</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={updatePersons} />{" "}
-        </div>
-        <div>
-          number : <input value={newNum} onChange={updateNum} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        updatePersons={updatePersons}
+        newNum={newNum}
+        updateNum={updateNum}
+      />
       <h2>Numbers</h2>
-      {displayPersons}
+      <Persons displayPersons={displayPersons} />
     </div>
   );
 };
