@@ -1,21 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import personServices from "./services/people";
+import axious from "axios";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
 
+  useEffect(() => {
+    personServices.getAll().then((initialResponse) => {
+      setPersons(initialResponse);
+    });
+  }, []);
+
   const addPerson = (event) => {
     event.preventDefault();
-    console.log("success");
     console.log("button clicked", event.target);
     console.log("new name", newName);
     const newPerson = {
@@ -31,9 +33,12 @@ const App = () => {
       return true;
     });
     if (checker === false) {
-      setPersons(persons.concat(newPerson));
-      setNewName("");
-      setNewNum("");
+      personServices.update(newPerson).then((returnedPerson) => {
+        console.log("the returned person is", returnedPerson);
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNum("");
+      });
     } else alert(`${newName} is already added to the phonebook`);
   };
   const displayPersons = persons.map((person) => {
