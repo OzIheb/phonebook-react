@@ -15,6 +15,7 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+    console.log("success");
     console.log("button clicked", event.target);
     console.log("new name", newName);
     const newPerson = {
